@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import * as Font from 'expo-font';
-import { Root, StyleProvider } from 'native-base';
+import { Root, StyleProvider, Spinner } from 'native-base';
 import React, { Component } from 'react';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 import { Provider } from 'react-redux';
@@ -48,6 +48,10 @@ export default class App extends Component {
   }
 
   render() {
+    if (!this.state.isReady) {
+      return <Spinner></Spinner>;
+    }
+
     return (
       <Root>
         <StyleProvider style={getTheme(variables)}>

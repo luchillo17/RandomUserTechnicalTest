@@ -41,14 +41,12 @@ export const HomeContainer = connect(
     }
 
     render() {
-      if (this.props.isLoading) {
-        return <Spinner></Spinner>;
-      }
-
       return (
         <Home
           navigation={this.props.navigation}
           users={this.props.users}
+          isLoading={this.props.isLoading}
+          triggerFetchUsers={() => this.props.fetchUsers()}
         ></Home>
       );
     }

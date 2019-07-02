@@ -11,15 +11,20 @@ import {
   Text,
   Thumbnail,
   Title,
+  Spinner,
+  Root,
 } from 'native-base';
 import React, { Component } from 'react';
 
 import { getUserName } from '../utils';
 import styles from './styles';
+import { FlatList } from 'react-native';
 
 interface Props {
+  users: [];
+  isLoading: boolean;
   navigation: any;
-  users: any;
+  triggerFetchUsers: () => void;
 }
 
 export class Home extends Component<Props> {
@@ -27,34 +32,56 @@ export class Home extends Component<Props> {
     this.props.navigation.navigate('UserDetail', user);
   }
 
+  fetchMoreUsers = () => {
+    console.log('Fetching: ', this.props.isLoading);
+    if (this.props.isLoading) {
+      return;
+    }
+
+    this.props.triggerFetchUsers();
+  };
+
+  renderListFooter = () => {
+    return this.props.isLoading ? <Spinner></Spinner> : null;
+  };
+
   render() {
     return (
-      <Container style={styles.container}>
-        <Header>
-          <Body>
-            <Title>Home</Title>
-          </Body>
-          <Right />
-        </Header>
+      <Root>
+        <Container style={styles.container}>
+          <Header>
+            <Body>
+              <Title>Home</Title>
+            </Body>
+            <Right />
+          </Header>
 
-        <Content>
-          <List>
-            {this.props.users.map((user, i) => (
-              <ListItem avatar key={i} onPress={() => this.goToUser(user)}>
-                <Left>
-                  <Thumbnail source={{ uri: user.picture.thumbnail }} />
-                </Left>
-                <Body style={{ alignItems: 'flex-start' }}>
-                  <Text>{getUserName(user)}</Text>
-                </Body>
-                <Right>
-                  <Icon active name='arrow-forward' />
-                </Right>
-              </ListItem>
-            ))}
-          </List>
-        </Content>
-      </Container>
+          <Content style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>
+            <List>
+              <FlatList
+                data={this.props.users}
+                keyExtractor={(user: any) => user.login.uuid}
+                renderItem={({ item: user }) => (
+                  <ListItem avatar onPress={() => this.goToUser(user)}>
+                    <Left>
+                      <Thumbnail source={{ uri: user.picture.thumbnail }} />
+                    </Left>
+                    <Body style={{ alignItems: 'flex-start' }}>
+                      <Text>{getUserName(user)}</Text>
+                    </Body>
+                    <Right>
+                      <Icon active name='arrow-forward' />
+                    </Right>
+                  </ListItem>
+                )}
+                ListFooterComponent={this.renderListFooter}
+                onEndReached={this.fetchMoreUsers}
+                onEndReachedThreshold={0.5}
+              ></FlatList>
+            </List>
+          </Content>
+        </Container>
+      </Root>
     );
   }
 }

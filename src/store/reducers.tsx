@@ -2,7 +2,7 @@ import { isSameUser } from '../utils';
 import { ActionTypes } from './actions';
 
 export interface UsersState {
-  list: [];
+  list: any[];
   isLoading: boolean;
 }
 
@@ -16,7 +16,7 @@ export function usersReducer(state: UsersState = initialState, action) {
     case ActionTypes.FETCH_LIST_SUCCESS:
       return {
         ...state,
-        list: action.list,
+        list: [...state.list, ...action.list],
       };
 
     case ActionTypes.LIST_LOADING:
