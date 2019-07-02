@@ -1,3 +1,6 @@
+import * as ImagePicker from 'expo-image-picker';
+import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
+import * as Permissions from 'expo-permissions';
 import {
   Body,
   Button,
@@ -15,14 +18,40 @@ import {
 } from 'native-base';
 import React, { Component } from 'react';
 
+import { UpdateUserPhoto } from '../store/actions';
 import { getUserAddress, getUserName } from '../utils';
 import styles from './styles';
 
 interface Props {
   navigation: any;
+  user: any;
+  UpdateUserPhoto: typeof UpdateUserPhoto;
 }
 
 export class UserDetail extends Component<Props> {
+  getPhoto = async (user) => {
+    try {
+      const { status } = await Permissions.askAsync(
+        Permissions.CAMERA,
+        Permissions.CAMERA_ROLL,
+      );
+
+      if (status !== 'granted') {
+        return;
+      }
+
+      const result = await ImagePicker.launchCameraAsync();
+
+      if (result.cancelled) {
+        return;
+      }
+
+      this.props.UpdateUserPhoto(user, (result as ImageInfo).uri);
+    } catch (error) {
+      console.error('ImagePicker error: ', error);
+    }
+  };
+
   renderUserDetails(user) {
     return (
       <Card transparent>
@@ -67,12 +96,19 @@ export class UserDetail extends Component<Props> {
             </Text>
           </Body>
         </CardItem>
+
+        <CardItem>
+          <Button onPress={() => this.getPhoto(user)}>
+            <Icon name='camera' />
+            <Text>Take new thumbnail photo</Text>
+          </Button>
+        </CardItem>
       </Card>
     );
   }
 
   render() {
-    const user = this.props.navigation.state.params;
+    const user = this.props.user;
 
     return (
       <Container style={styles.container}>

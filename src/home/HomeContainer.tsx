@@ -1,14 +1,13 @@
-import { Spinner } from 'native-base';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import { StoreState } from '../store';
 import { fetchUsers } from '../store/actions';
 import { Home } from './Home';
-import { bindActionCreators } from 'redux';
 
 interface Props {
-  users: [];
+  users: any[];
   isLoading: boolean;
   navigation: any;
   fetchUsers: () => void;
@@ -41,14 +40,12 @@ export const HomeContainer = connect(
     }
 
     render() {
-      if (this.props.isLoading) {
-        return <Spinner></Spinner>;
-      }
-
       return (
         <Home
           navigation={this.props.navigation}
           users={this.props.users}
+          isLoading={this.props.isLoading}
+          triggerFetchUsers={() => this.props.fetchUsers()}
         ></Home>
       );
     }
