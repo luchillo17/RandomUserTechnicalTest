@@ -17,6 +17,9 @@
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": ["**/*"],
+    "android": {
+      "package": "com.luchillo17.random_user_list"
+    },
     "ios": {
       "supportsTablet": true
     }
