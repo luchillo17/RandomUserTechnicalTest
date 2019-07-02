@@ -8,20 +8,20 @@ import {
   List,
   ListItem,
   Right,
+  Root,
+  Spinner,
   Text,
   Thumbnail,
   Title,
-  Spinner,
-  Root,
 } from 'native-base';
 import React, { Component } from 'react';
+import { FlatList } from 'react-native';
 
 import { getUserName } from '../utils';
 import styles from './styles';
-import { FlatList } from 'react-native';
 
 interface Props {
-  users: [];
+  users: any[];
   isLoading: boolean;
   navigation: any;
   triggerFetchUsers: () => void;
