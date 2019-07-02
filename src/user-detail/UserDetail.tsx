@@ -42,15 +42,13 @@ export class UserDetail extends Component<Props> {
 
       const result = await ImagePicker.launchCameraAsync();
 
-      console.log('PhotoResult: ', result);
-
       if (result.cancelled) {
         return;
       }
 
       this.props.UpdateUserPhoto(user, (result as ImageInfo).uri);
     } catch (error) {
-      console.log('ImagePicker error: ', error);
+      console.error('ImagePicker error: ', error);
     }
   };
 

@@ -42,8 +42,6 @@ export function usersReducer(state: UsersState = initialState, action) {
       const list = [...state.list];
       list.splice(userIndex, 1, newUser);
 
-      console.log('Lists: ', state.list, list);
-
       return {
         ...state,
         list,

@@ -33,7 +33,6 @@ export class Home extends Component<Props> {
   }
 
   fetchMoreUsers = () => {
-    console.log('Fetching: ', this.props.isLoading);
     if (this.props.isLoading) {
       return;
     }
