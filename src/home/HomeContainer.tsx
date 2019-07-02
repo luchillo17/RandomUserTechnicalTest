@@ -1,0 +1,56 @@
+import { Spinner } from 'native-base';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
+import { StoreState } from '../store';
+import { fetchUsers } from '../store/actions';
+import { Home } from './Home';
+import { bindActionCreators } from 'redux';
+
+interface Props {
+  users: [];
+  isLoading: boolean;
+  navigation: any;
+  fetchUsers: () => void;
+}
+
+const mapStateToProps = (state: StoreState): Partial<Props> => ({
+  users: state.users.list,
+  isLoading: state.users.isLoading,
+});
+
+const bindActions = (dispatch) =>
+  bindActionCreators(
+    {
+      fetchUsers,
+    },
+    dispatch,
+  );
+
+export const HomeContainer = connect(
+  mapStateToProps,
+  bindActions,
+)(
+  class extends Component<Props> {
+    constructor(props) {
+      super(props);
+    }
+
+    componentDidMount() {
+      this.props.fetchUsers();
+    }
+
+    render() {
+      if (this.props.isLoading) {
+        return <Spinner></Spinner>;
+      }
+
+      return (
+        <Home
+          navigation={this.props.navigation}
+          users={this.props.users}
+        ></Home>
+      );
+    }
+  },
+);
